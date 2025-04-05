@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <style>
+        /* Global Styles */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f5f6fa;
+            color: #2d3436;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Main Container */
+        .main-container {
+            display: flex;
+            width: 90%;
+            max-width: 1200px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            margin: 40px auto;
+            min-height: 90vh;
+            padding: 20px;
+        }
+
+        /* Left Side: Scrollable Image Section */
+        .image-container {
+            width: 40%;
+            background: #132ccd;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .image-scroll {
+            width: 90%;
+            height: 100%;
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            animation: scrollImages 10s linear infinite;
+        }
+
+        .image-scroll img {
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Scroll Animation */
+        @keyframes scrollImages {
+            0% {
+                transform: translateY(100%);
+            }
+            100% {
+                transform: translateY(-100%);
+            }
+        }
+
+        /* Right Side: User Dashboard */
+        .dashboard-container {
+            width: 60%;
+            padding: 20px;
+            background: #fff;
+        }
+
+        header {
+            background-color: #041690;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            margin: 0;
+        }
+
+        .btn-logout {
+            background-color: #cc0102;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-logout:hover {
+            background-color: #e31414;
+        }
+
+        .nav-bar {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .user-info {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .user-info span {
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            font-size: 1rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #dfe6e9;
+        }
+
+        /* Form Styling */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background: #f1f2f6;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            text-align: center;
+            color: #2d3436;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input, textarea {
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #b2bec3;
+            border-radius: 5px;
+            width: 96.5%;
+            background: white;
+        }
+
+        textarea {
+            height: 100px;
+            resize: none;
+        }
+
+        button {
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 5px;
+            background-color: #041690;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #142dcd;        
+        }
+
+        /* Grievance Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th, table td {
+            border: 1px solid #dfe6e9;
+            padding: 10px;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #041690;
+            color: white;
+        }
+
+        .status-bar {
+            font-size: 0.9rem;
+            padding: 5px 10px;
+            border-radius: 5px;
+            color: #fff;
+            text-align: center;
+        }
+
+        .under-implementation {
+            background-color: #cc0102;
+        }
+
+        .unchecked {
+            background-color: orangered;
+        }
+
+        .completed {
+            background-color: #03b103;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #636e72;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+                width: 95%;
+            }
+
+            .image-container {
+                width: 100%;
+                height: 200px;
+            }
+
+            .dashboard-container {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- Left: Image Scroller -->
+        <div class="image-container">
+            <div class="image-scroll">
+                <img src="./Img/s1.jpg" alt="Image 1">
+                <img src="./Img/s2.jpg" alt="Image 2">
+                <img src="./Img/s3.webp" alt="Image 3">
+                <img src="./Img/g1.jpeg" alt="Image 4">
+                <img src="./Img/g2.jpg" alt="Image 5">
+                <img src="./Img/g3.jpg" alt="Image 6">
+                <img src="./Img/s4.avif" alt="Image 7">
+            </div>
+        </div>
+    
+        <!-- Right: User Dashboard -->
+        <div class="dashboard-container">
+            <header>
+                <h1>User Dashboard</h1>
+                <div class="nav-bar">
+                    <button class="btn-logout" onclick="logout()">Logout</button>
+                </div>
+            </header>
+    
+            <main>
+                <section>
+                    <h2>Submit Grievance</h2>
+                    <form id="grievanceForm">
+                        <label for="email">Your Email</label>
+                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                    
+                        <label for="title">Title</label>
+                        <input type="text" id="title" name="title" placeholder="Enter grievance title" required>
+                    
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description" placeholder="Enter grievance details" required></textarea>
+                    
+                        <button type="submit">Submit</button>
+                    </form>                    
+                </section>
+            
+                <section>
+                    <h2>Your Grievances</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Title</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="userGrievances">
+                            <!-- Grievances will be dynamically loaded here -->
+                        </tbody>
+                    </table>
+                </section>
+            </main>
+
+            <footer>
+                <p>&copy; 2025 Grievance Portal</p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        // Fetch user data from localStorage
+        async function fetchUserInfo() {
+            const email = localStorage.getItem("userEmail"); 
+            if (!email) {
+                alert("User not logged in!");
+                window.location.href = "user-login.html";
+                return;
+            }
+
+            console.log("Fetching grievances for user:", email);
+
+            try {
+                const response = await fetch(`/user-grievances?email=${email}`);
+                if (!response.ok) throw new Error("Failed to fetch grievances.");
+
+                const grievances = await response.json();
+                const tbody = document.getElementById("userGrievances");
+
+                if (grievances.length === 0) {
+                    tbody.innerHTML = "<tr><td colspan='3'>No grievances found.</td></tr>";
+                } else {
+                    tbody.innerHTML = grievances.map(grievance => 
+                        `<tr>
+                            <td>${grievance.id}</td>
+                            <td>${grievance.title}</td>
+                            <td class="status-bar ${grievance.status.replace(/\s/g, '-').toLowerCase()}">
+                                ${grievance.status}
+                            </td>
+                        </tr>`
+                    ).join('');
+                }
+            } catch (error) {
+                console.error("Error fetching grievances:", error);
+            }
+        }
+
+        // Fetch user data when page loads
+        document.addEventListener("DOMContentLoaded", fetchUserInfo);
+
+        // Handle grievance form submission
+        document.getElementById("grievanceForm").addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const email = document.getElementById("email").value.trim();
+            if (!email) {
+                alert("Please enter your email.");
+                return;
+            }
+
+            const title = document.getElementById("title").value.trim();
+            const description = document.getElementById("description").value.trim();
+
+            try {
+                const response = await fetch("/submit-grievance", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email, title, description }),
+                });
+
+                if (!response.ok) throw new Error("Error submitting grievance.");
+                alert("Grievance submitted successfully.");
+                
+                fetchUserInfo();
+            } catch (error) {
+                console.error("Error:", error);
+                alert(error.message || "Submission failed.");
+            }
+        });
+
+        // Load user grievances from API
+        async function loadUserGrievances(userId) {
+            const response = await fetch(`/user-grievances?userId=${userId}`);
+            if (!response.ok) throw new Error('Failed to fetch grievances.');
+
+            const grievances = await response.json();
+            const tbody = document.getElementById('userGrievances');
+
+            if (grievances.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="3">No grievances found.</td></tr>';
+            } else {
+                tbody.innerHTML = grievances
+                    .map(grievance => 
+                        `<tr>
+                            <td>${grievance.id}</td>
+                            <td>${grievance.title}</td>
+                            <td class="status-bar ${grievance.status.replace(/\s/g, '-').toLowerCase()}">
+                                ${grievance.status}
+                            </td>
+                        </tr>`
+                    ).join('');
+            }
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.clear();
+            window.location.href = "index.html";
+        }
+
+        fetchUserData();
+    </script>
+</body>
+</html>

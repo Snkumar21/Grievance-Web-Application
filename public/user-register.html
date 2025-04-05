@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+    <style>
+        /* Reset and Base Styles */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #74b9ff, #a29bfe);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            width: 750px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Left Side - Registration Form */
+        .register-section {
+            width: 50%;
+            padding: 30px;
+            background: white;
+        }
+
+        .register-section h1 {
+            font-size: 1.8rem;
+            color: #2d3436;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #636e72;
+        }
+
+        input {
+            width: 92%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #dfe6e9;
+            border-radius: 5px;
+            font-size: 1rem;
+            background-color: #f9f9f9;
+        }
+
+        input:focus {
+            outline: none;
+            border: 1px solid #0984e3;
+            background-color: #ffffff;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #041690;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0922c6;
+            color: #fff;
+        }
+
+        /* Right Side - Welcome Section */
+        .welcome-section {
+            width: 50%;
+            background-color: #041690;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .welcome-section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .welcome-section p {
+            font-size: 1rem;
+            margin-bottom: 20px;
+            color: #ccc;
+        }
+
+        .login-btn {
+            padding: 10px 15px;
+            font-size: 1rem;
+            background-color: #fff;
+            color: #041690;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .login-btn:hover {
+            background-color: #0922c6;
+            color: #fff;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 750px) {
+            .container {
+                flex-direction: column;
+                width: 90%;
+            }
+
+            .register-section, .welcome-section {
+                width: 100%;
+                text-align: center;
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Left Side - Registration Form -->
+        <div class="register-section">
+            <h1>User Registration</h1>
+            <form id="userRegisterForm">
+                <label for="registerName">Name</label>
+                <input type="text" id="registerName" name="name" placeholder="Enter Full Name" required>
+
+                <label for="registerEmail">Email</label>
+                <input type="email" id="registerEmail" name="email" placeholder="Enter Email" required>
+
+                <label for="registerPhone">Phone Number</label>
+                <input type="tel" id="registerPhone" name="phone" placeholder="Enter Phone Number" required>
+
+                <label for="registerPassword">Password</label>
+                <input type="password" id="registerPassword" name="password" placeholder="Enter Password" required>
+
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" placeholder="Re-type Password" required>
+
+                <button type="submit">Register</button>
+            </form>
+        </div>
+
+        <!-- Right Side - Welcome Section -->
+        <div class="welcome-section">
+            <h2>Join Us!</h2>
+            <p>Create an account to submit and track your grievances easily.</p>
+            <a href="user-login.html" class="login-btn">Already a User? Login</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('userRegisterForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const name = document.getElementById('registerName').value.trim();
+            const email = document.getElementById('registerEmail').value.trim();
+            const phone = document.getElementById('registerPhone').value.trim();
+            const password = document.getElementById('registerPassword').value.trim();
+            const confirmPassword = document.getElementById('confirmPassword').value.trim();
+
+            // Validate matching passwords
+            if (password !== confirmPassword) {
+                alert("Passwords do not match. Please try again.");
+                return;
+            }
+
+            // Prepare data to send
+            const requestData = { name, email, phone, password };
+
+            try {
+                // Send data to the server
+                const response = await fetch('/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestData)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert("User registered successfully!");
+                    window.location.href = "user-login.html";
+                } else {
+                    alert(result.message || "Registration failed. Please try again.");
+                }
+            } catch (error) {
+                console.error("Error during registration:", error);
+                alert("An error occurred. Please try again later.");
+            }
+        });
+    </script>
+
+</body>
+</html>

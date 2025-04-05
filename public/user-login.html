@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Login</title>
+    <style>
+        /* Reset and Base Styles */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #81ecec, #6c5ce7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            width: 700px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Left Side - Login Form */
+        .login-section {
+            width: 50%;
+            padding: 40px;
+            background: white;
+        }
+
+        .login-section h1 {
+            font-size: 1.8rem;
+            color: #2d3436;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #636e72;
+            text-align: left;
+        }
+
+        input {
+            width: 90%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #dfe6e9;
+            border-radius: 5px;
+            font-size: 1rem;
+            background-color: #f9f9f9;
+        }
+
+        input:focus {
+            outline: none;
+            border: 1px solid #0984e3;
+            background-color: #ffffff;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #041690;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0922c6;
+        }
+
+        p {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #636e72;
+            text-align: center;
+        }
+
+        p a {
+            text-decoration: none;
+            color: red;
+        }
+
+        p a:hover {
+            text-decoration: 1.5px underline solid #041690;
+            text-underline-offset: 1.5px;
+        }
+
+        /* Right Side - Welcome Section */
+        .welcome-section {
+            width: 50%;
+            background-color: #041690;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .welcome-section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .welcome-section p {
+            font-size: 1rem;
+            margin-bottom: 20px;
+            color: #ccc;
+        }
+
+        .register-btn {
+            padding: 10px 15px;
+            font-size: 1rem;
+            background-color: #fff;
+            color: #041690;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .register-btn:hover {
+            background-color: #0922c6;
+            color: #fff;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 700px) {
+            .container {
+                flex-direction: column;
+                width: 90%;
+            }
+
+            .login-section, .welcome-section {
+                width: 100%;
+                text-align: center;
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Left Side - Login Form -->
+        <div class="login-section">
+            <h1>User Login</h1>
+            <form id="userLoginForm">
+                <label for="userEmail">Email</label>
+                <input type="email" id="userEmail" name="email" placeholder="Enter Email" required>
+
+                <label for="userPassword">Password</label>
+                <input type="password" id="userPassword" name="password" placeholder="Enter Password" required>
+
+                <button type="submit">Login</button>
+            </form>
+            <p>New user? <a href="user-register.html">Register here</a></p>
+        </div>
+
+        <!-- Right Side - Welcome Section -->
+        <div class="welcome-section">
+            <h2>Welcome Back!</h2>
+            <p>Login to access your account and manage your grievances easily.</p>
+            <a href="user-register.html" class="register-btn">Register Now</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('userLoginForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const email = document.getElementById('userEmail').value.trim();
+            const password = document.getElementById('userPassword').value.trim();
+
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    // ✅ Store user data in localStorage
+                    localStorage.setItem("userId", result.data.id);
+                    localStorage.setItem("userName", result.data.name);
+                    localStorage.setItem("userEmail", result.data.email);
+
+                    alert("Login successful!");
+                    window.location.href = "user-dashboard.html";
+                } else {
+                    alert(result.message || "Invalid credentials. Please try again.");
+                }
+            } catch (error) {
+                console.error("Error during login:", error);
+                alert("An error occurred. Please try again later.");
+            }
+        });
+    </script>
+
+</body>
+</html>
